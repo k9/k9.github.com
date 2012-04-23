@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="audioStream.js"></script>
+<script type="text/javascript" src="synth.js"></script>
+</head>
+<body>
+<h1>HTML5 Synth Test</h1>
+<script>
+//Each element is a sixteenth note
+//36 = A440, 37 is one half-step up, 48 is an octave up, etc.
+//99 = No sound
+var melody = {
+    notes: [
+        22,99,99,99,25,99,99,99,
+        22,99,22,99,25,99,25,99,
+        27,99,99,99,25,99,99,99,
+        24,99,99,99,22,99,99,99,
+        22,99,99,99,25,99,99,99,
+        22,99,22,99,25,99,25,99,
+        27,99,99,99,25,99,99,99,
+        27,99,99,99,28,99,99,99
+    ],
+    synth: melodySynth,
+    volume: 0.1
+};
+
+var bass = {
+    notes: [
+        10,10,10,99, 8, 8, 8,99,
+        10,10,10,99,13,13,13,99,
+         4, 4, 4,99,13,13,13,99,
+        11,11,11,99,10,10,10,99        
+    ],
+    synth: bassSynth,
+    volume: 0.05
+};
+
+//1 = snare, 2 = bass drum
+var drums = {
+    notes: [
+         2,99,99,99, 1,99,99,99,
+         2,99, 2,99, 1,99,99,99,
+         2,99,99,99, 1,99,99,99,
+         2,99, 2,99, 1,99,99, 1
+    ],
+    synth: drumSynth,
+    volume: 0.7,
+}
+
+var voices = [melody, bass, drums];
+
+var volume = 1, bpm = 100;
+var node = audioStream(function(startSample, buffer, bufferSize, sampleRate) {
+    for(var i = 0; i < bufferSize; i++) {
+        var time = (startSample + i) / sampleRate; 
+        buffer[i] = playVoices(voices, time, volume, bpm);
+    }
+});
+</script>
+</body>
+</html>

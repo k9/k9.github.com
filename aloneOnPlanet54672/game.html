@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<body style="background: #222">
+<head>
+<title>Game</title>
+<style>
+body { font-family: verdana; color: #eee; font-size: 14px; }
+h1 { font-size: 18px; letter-spacing: -1px; }
+li { margin-bottom: 10px; }
+ul { list-style-type: square }
+#game { position: relative; width: 800px; height: 600px; }
+.text { color: #444; position: absolute; left: 50px; right: 50px; top: 50px; 
+        background: #eee; padding: 50px 50px 40px; border-radius: 10px; }
+.bottomText { color: #eee; top: auto; bottom: 10px; left: 10px; right: 10px; padding: 12px 12px 2px; text-align: center;
+        background: rgba(1,1,1,0.5); }
+.text p { margin: 0 0 10px 0 }
+#loading { position: absolute; top: 0; right: 0; width: 800px; height: 600px; background: #eee; color: #444; }
+#loading h1 {  letter-spacing: -3px; margin-top: 275px; text-align: center; font-size: 40px; }
+</style>
+</head>
+<p id="pos"></p>
+<div id="game" style="width: 800px; margin: 0 auto">
+
+<div class="text" id="text1">
+<h1>You have been abandoned by your employer, SpaceCorp, Inc.</h1>
+<ul>
+<li>A long way east, there is a transport back home.</li>
+<li>You burn fuel all the time &ndash; even more when using the left or right thrusters.</li>
+<li>Watch the green fuel guage. Hover over the fuel stations to refuel.</li>
+<li>To get over tough hills, back up and then go forward to gain momentum.</li>
+</ul>
+</div>
+
+<div class="text bottomText">
+<p><b>D</b> or <b>&rarr;</b> to go Right <b>| A</b> or &larr; to go Left <b>| R</b> to restart the level <b>| I</b> for instructions</p>
+</div>
+
+<div id="loading"><h1 id="loadingText">Loading...</h1></div>
+</div>
+<script src="libs/lightgl.js"></script>
+<script src="libs/csg.js"></script>
+<script src="libs/viewer.js"></script>
+<script src="utils.js"></script>
+<script src="shaders.js"></script>
+<script src="render.js"></script>
+<script src="terrain.js"></script>
+<script src="car.js"></script>
+<script>
+var currentLevel = 0;
+var angle = 0;
+var gl = GL.create();
+document.getElementById("game").appendChild(gl.canvas);
+var shaders = new Shaders();
+var car = new Car();
+var terrain = loadNextLevel();
+var carState = loadCarState();
+
+function loadNextLevel() {
+    currentLevel++;
+    var level;
+    document.getElementById("loading").style.display = "block";
+    if(currentLevel == 1) { level = new LevelOne(); }
+    if(currentLevel == 2) { level = new LevelTwo(); }
+    if(currentLevel == 3) { 
+        document.getElementById("loadingText").textContent = "You made it. Congratulations."; 
+        gl.onupdate = null;
+        return; 
+    }
+
+    setTimeout(function() {
+        document.getElementById("loading").style.display = "none";
+    }, 1000);
+        
+    return level;
+}
+
+function loadCarState() {
+    return { 
+        x: terrain.carStart, y: 0, 
+        speed: 0, accelerate: false, brake: false, 
+        fuelAmount: 1, time: 0, finish: false
+    }
+}
+
+//wasd, 87 65 83 68
+//uldr, 38 37 40 39
+function keyChange(code, pressed) { 
+    if(pressed) {
+        if(code == 73)
+            document.getElementById("text1").style.display = "block";
+        else
+            document.getElementById("text1").style.display = "none";
+    }
+
+    if(code == 68 || code == 39) carState.accelerate = pressed; 
+    if(code == 65 || code == 37) carState.brake = pressed; 
+    if(code == 82) carState = loadCarState();
+}
+
+document.onkeydown = function(e) { keyChange(e.keyCode, true); }
+document.onkeyup = function(e) { keyChange(e.keyCode, false); }
+
+gl.onupdate = glUpdate;
+
+function glUpdate(seconds) {
+    if(carState.x > terrain.finishLine) {
+        terrain = loadNextLevel(); 
+        carState = loadCarState();
+        return; 
+    }
+
+    carState.time += seconds;
+    var lastSpeed = carState.speed;
+    carState.accelerate = carState.accelerate && carState.fuelAmount > 0;
+    carState.brake = carState.brake && carState.fuelAmount > 0;
+
+    if(carState.accelerate) {
+        carState.speed += 90 * seconds;
+        carState.fuelAmount -= seconds / 10;
+    }
+    else if(carState.brake) {
+        carState.speed -= 90 * seconds;
+        carState.fuelAmount -= seconds / 10;
+    }
+    else {
+        carState.speed *= 0.9;
+        carState.fuelAmount -= seconds / 30;
+    }
+
+    var segment = Math.floor(carState.x);
+    var startHeight = terrain.ground.height[segment];
+    var endHeight = terrain.ground.height[segment + 1];
+
+    carState.speed += (startHeight - endHeight) * 500 * seconds;
+
+    if(carState.speed > 100) carState.speed = 100;
+    if(carState.speed < -100) carState.speed = -100; 
+
+    carState.x += carState.speed * seconds;
+    if(carState.x < 505) { carState.x = 505 + 0.01; carState.speed = 1; }
+    if(carState.x > terrain.finishLine) carState.x = terrain.finishLine + 0.1;
+
+    carState.y = mix(startHeight, endHeight, carState.x - segment);
+
+    if(terrain.wells.indexOf(Math.floor(carState.x)) > -1 || terrain.wells.indexOf(Math.ceil(carState.x)) > -1)
+        carState.fuelAmount += seconds;
+
+    if(carState.fuelAmount < 0)
+        carState.fuelAmount = 0;
+    else if(carState.fuelAmount > 1)
+        carState.fuelAmount = 1;
+
+    //document.getElementById("pos").textContent = carState.x + " " + seconds;
+};
+
+setupRender();
+gl.ondraw = render;
+gl.animate();
+</script>
+</body>
+</html>
