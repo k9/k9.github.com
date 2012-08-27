@@ -2,7 +2,7 @@
 
 var $$ = window.game = {
     keysDown: {},
-    keys: { left: 37, right: 39, up: 38, down: 40, A: 65, S: 83, D: 68, F: 70, R: 82, space: 32 },
+    keys: { left: 37, right: 39, up: 38, down: 40, W: 87, A: 65, S: 83, D: 68, F: 70, R: 82, space: 32 },
 
     keyChange: function(code, pressed) {
         if(code == $$.keys.right || code == this.keys.D)
