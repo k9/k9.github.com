@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+<style rel="stylesheet" type="text/css">
+* { margin: 0; padding: 0 }
+body { background: #444; padding-top: 30px; font-family: helvetica, arial, sans-serif; }
+#canvasContainer { margin: 0px auto; text-align: center; height: 576px; width: 968px; position: relative }
+#canvasContainer canvas { position: absolute; right: 0; top: 0 }
+#hud { background: #ccc; color: #222; position: absolute; left: 0; width: 160px; padding: 120px 20px 20px; height: 436px }
+#hud .section { padding: 20px 0; margin: 20px 0; border-radius: 6px }
+#hud h1 { font-size: 20px; font-weight: bold; margin: 20px 0 10px; }
+#hud h2 { font-size: 16px; }
+
+#hud .bar { position:relative; margin: 0 auto 10px auto; display: block; width: 100px; height: 16px; background: url('greyBar.png');}
+#hud .bar .inner { position:absolute; display: block; height: 16px; background: url('greenBar.png') }
+#hud .stat.bar .inner { background: url('blueBar.png') }
+#hud .stat.bar .inner.next { background: url('goldBar.png') }
+
+#hud .transition.bar { display:none;position: absolute; left: 50px; top: 80px }
+
+#canvasContainer .screen { padding: 100px; background: #eee; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 10 }
+#canvasContainer .screen h1 { margin-bottom: 30px }
+#canvasContainer .screen p { text-align: left; margin-bottom: 20px }
+
+#canvasContainer .keys { position: absolute; bottom: -30px; z-index: 2; height: 20px; left:200px; width: 600px; background: rgba(0,0,0,0.6);
+color: #eee; border-radius: 10px; padding-top: 3px;}
+</style>
+
+<div id="canvasContainer">
+<div id="hud">
+<h1>Health</h1>
+<p class="health bar"><span class="inner" /></p>
+
+<div class="current section">
+<h1>Generation 0</h1>
+<h2>Speed</h2>
+<p class="stat speed bar"><span class="inner next"></span><span class="inner"></span></p>
+<h2>Jump</h2>
+<p class="stat jump bar"><span class="inner next"></span><span class="inner"></span></p>
+<h2>Blaster</h2>
+<p class="stat blaster bar"><span class="inner next"></span><span class="inner"></span></p>
+</div>
+</div>
+
+<div class="screen">
+<h1 style="color: #668; font-size: 40px; font-weight: bold; letter-spacing: -2px">ROVOLUTION</h1>
+<p>You're an innovative Rover that evolves with experience. You must reach the exit to escape each level.</p>
+<p>As you gain altitude by jumping, your jump will become higher.</p>
+<p>As you venture further from the start, your speed will improve.</p>
+<p>As you destroy turrets with your blaster, it will shoot further.</p>
+<p style="text-align:center">
+    <input type="button" class="sound" value="Start With Sound" />
+    <input type="button" class="noSound" value="Start Without Sound" />
+</p>
+</div>
+
+<div class="screen message" style="display:none">
+<h1></h1>
+<p style="text-align:center">Click to continue.</p>
+</div>
+
+<p class="keys"><b>WASD</b> or <b>Arrows</b> to Move <b>| Space</b> to Shoot <b>| R</b> to restart the level</p>
+</div>
+
+<script src="js/jquery.js"></script>
+<script src="js/lightgl.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/game.js"></script>
+<script src="js/render.js"></script>
+<script src="js/rover.js"></script>
+<script src="js/projectile.js"></script>
+<script src="js/turret.js"></script>
+<script src="js/level.js"></script>
+<script src="js/audioStream.js"></script>
+<script src="js/synth.js"></script>
+<script src="js/sound.js"></script>
+<script>
+$(function() {
+    $(".sound").click(function() { game.enableSound = true; game.loadLevel(1); });
+    $(".noSound").click(function() { game.enableSound = false; game.loadLevel(1); });
+});
+</script>
+</body>
+</html>
