@@ -1,14 +1,15 @@
 var audioStream = function(fillBuffer) {
-    var BUFFER_SIZE = 1024;
+    var BUFFER_SIZE = 4096;
     var SAMPLE_RATE = 44100;
     var frame = 0;
     var samples = new Float32Array(BUFFER_SIZE);
+    var AC = window.AudioContext || window.webkitAudioContext;
 
-    if(typeof webkitAudioContext != "undefined") {
-        var context = new webkitAudioContext();
-        var node = context.createJavaScriptNode(BUFFER_SIZE, 1, 2);
+    if (typeof AC != "undefined") {
+        var context = new AC();
+        var node = context.createScriptProcessor(BUFFER_SIZE, 1, 2);
         node.onaudioprocess = function(e) {
-            var left = e.outputBuffer.getChannelData(0), 
+            var left = e.outputBuffer.getChannelData(0),
                 right = e.outputBuffer.getChannelData(1);
 
             fillBuffer(frame, samples, BUFFER_SIZE, SAMPLE_RATE);
