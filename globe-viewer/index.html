@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Globe Viewer</title>
+  <script src="vendor.js"></script>
+  <script src="app.js"></script>
+  <script>require('initialize');</script>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="map-container">
+    <div class="map-canvas">
+      <canvas></canvas>
+    </div>
+    <div class="map-controls">
+      <h1>Globe Viewer</h1>
+      <div>
+        <div class="top-row">
+          <label>Location</label>
+        </div>
+        <div class="sub-group">
+          <range-slider
+            label="Latitude"
+            property="latitude">
+          </range-slider>
+          <range-slider
+            label="Longitude"
+            property="longitude">
+          </range-slider>
+          <range-slider
+            label="Zoom"
+            property="zoom">
+          </range-slider>
+        </div>
+      </div>
+      <render-modes></render-modes>
+      <div class="info">
+        <a href="https://github.com/k9/globe-viewer">Github</a>
+        <a href="http://www.kwjames.com">About</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
