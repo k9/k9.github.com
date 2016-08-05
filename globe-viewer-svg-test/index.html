@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Globe Viewer</title>
+  <script src="vendor.js"></script>
+  <script src="app.js"></script>
+  <script>require('initialize');</script>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="app.css">
+  <link rel="icon" type="image/png" href="img/favicon.png" sizes="32x32">
+  <meta property="og:image" content="http://k9.github.io/globe-viewer/img/thumb.jpg">
+</head>
+<body>
+  <div class="loading">
+    <img src="img/loading.gif">
+  </div>
+  <div class="map-container">
+    <div class="map-canvas">
+      <canvas></canvas>
+    </div>
+    <div class="map-controls">
+      <div class="header-row">
+        <h1>Globe Viewer</h1>
+        <div class="info">
+          <a href="https://github.com/k9/globe-viewer">
+            <img alt="Source code" src="img/github.svg">
+          </a>
+          <a href="http://www.kwjames.com">
+            <img alt="About" src="img/info-circle.svg">
+          </a>
+        </div>
+      </div>
+      <div class="hidden-mobile">
+        <div class="sub-group vertical-slider-layout">
+          <range-slider
+            label="Latitude"
+            property="latitude">
+          </range-slider>
+          <range-slider
+            label="Longitude"
+            property="longitude">
+          </range-slider>
+          <range-slider
+            label="Zoom"
+            property="zoom"
+            vertical="true">
+          </range-slider>
+        </div>
+      </div>
+      <render-modes></render-modes>
+      <div>
+        <div class="sub-group">
+          <div class="checkbox-options">
+            <checkbox-option
+              label="Borders"
+              property="countries">
+            </checkbox-option>
+            <checkbox-option
+              label="Rivers"
+              property="rivers">
+            </checkbox-option>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
