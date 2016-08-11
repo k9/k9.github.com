@@ -22,9 +22,19 @@ body {
 }
 
 h1 { margin-bottom: 0; }
-p img { height: 1.75rem; }
-a { text-decoration: none; }
-input { vertical-align: 1px }
+
+a img {
+  height: 1.25rem;
+  vertical-align: bottom;
+}
+
+a, a:active, a:visited {
+  color: #444;
+  font-weight: bold;
+  padding-right: 1rem;
+}
+
+form { margin-bottom: 2rem; }
 
 fieldset {
   border: none;
@@ -32,11 +42,17 @@ fieldset {
   margin: 0;
 }
 
-label, fieldset>fieldset {
-  display: block;
-  padding: 0;
-  margin: 0.75rem 0 0 0;
+fieldset>fieldset {
+  margin: 1.5rem 0 0 0;
 }
+
+legend {
+  font-weight: bold;
+  padding: 0 0 0.5rem 0;
+}
+
+label { padding: 0 1rem 0 0; }
+input { margin: 0; vertical-align: 1px; }
 
 table {
   border-spacing: 0;
@@ -68,7 +84,7 @@ canvas, svg {
   width: 100%;
 }
 
-.countries { fill: #eee; stroke: #fff; stroke-width: 1px; }
-.rivers { fill: none; stroke: #88f; stroke-width: 0.5px }
-.lakes { fill: #88f; }
+.countries { fill: #eee; stroke: #78a; stroke-width: 0.5px; }
+.rivers { fill: none; stroke: #78a; stroke-width: 0.5px }
+.lakes { fill: #78a; }
 .globe { fill: #78a; }
